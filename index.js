@@ -66,6 +66,9 @@ async function openRandomNote() {
 }
 
 /**
+ *dasdsadwevwe First test
+ */
+/**
  * open random note in main area.
  * @param {*} pages 
  */
