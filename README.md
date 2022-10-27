@@ -1,8 +1,8 @@
-## logseq-random-note
+## Naext.one for Logseq
 
-![GitHub all releases](https://img.shields.io/github/downloads/tankcool/logseq-random-note/total)
+![GitHub all releases](https://img.shields.io/github/downloads/DonSqualo/naext-one-logseq/total)
 
-Random walk through your Logseq notes.
+An experimental plug that adds weights to the the Random Walk plugin
 
 ### Features
 
