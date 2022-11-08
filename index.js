@@ -101,11 +101,15 @@ async function openRandomNoteInMain(pages, naext) { /* So essentially what I wan
     }
   }
   else if (pages && pages.length > 0 && naext) {
-  	console.log("Hello")
-    beta = sin(Math.floor(Math.random() * pages.length)*pi/2)^2
+    const beta = Math.pow(Math.sin(Math.random()*Math.PI/2), 2);
+    console.log(Math.random()*Math.PI/2);
+    console.log(Math.sin(Math.random()*Math.PI/2));
     const index = (beta < 0.5) ? 2*beta : 2*(1-beta);
-    print(beta)
-    print(index)
+    console.log("Index is" + index);
+    console.log("Pages are" + pages.length);
+    const flooredIndex = Math.floor(index * pages.length);
+    console.log(flooredIndex);
+    const page = pages[flooredIndex];
     if (page && page.name) {
       logseq.App.pushState("page", { name: page.name });
     } else if (page && page.page) {
@@ -187,6 +191,7 @@ function getQueryScript() {
 }
 
 function main() {
+  console.log("Reloaded 2")
   logseq.provideModel({
     handleRandomNote() {
       openRandomNote();
