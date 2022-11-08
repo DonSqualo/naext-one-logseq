@@ -2,7 +2,7 @@
 
 ![GitHub all releases](https://img.shields.io/github/downloads/DonSqualo/naext-one-logseq/total)
 
-An experimental plug that adds weights to the the Random Walk plugin
+An experimental plugin that adds weights to the the Random Walk plugin. Not functional yet.
 
 ### Features
 

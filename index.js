@@ -19,28 +19,35 @@ const settingsTemplate = [
     description: "Include Journals?",
   },
   {
-    key: "randomTags",
+    key: "randomTags", /** I have been using that as a placeholder  */
     type: "string",
     default: "",
     title: "Tags mode",
     description: "Comma separated the tags. e.g. programing,design,sports",
-  },
+  }, 
   {
-    key: "advancedQuery",
+    key: "advancedQuery", /** This is cool, keep it  */
     type: "string",
     default: "",
     title: "Query mode",
     description:
       'Your custom query. e.g. [:find (pull ?b [*]) :where [?b :block/refs ?bp] [?bp :block/name "book"]]',
-  },
+  },  
   {
-    key: "randomStepSize",
+    key: "randomStepSize", /** what is this actually doing?  */
     type: 'enum',
     default: "1",
     title: "Random walk step size.",
     description: "Random walk step size. Use it with caution. One shows in main area, others show in the right sidebar.",
     enumChoices: ["1", "3", "5", "7", "10"],
     enumPicker: 'radio' 
+  },
+  {
+    key: "naextOne", /** this will be it  */
+    type: "boolean",
+    default: false,
+    title: "Naext mode",
+    description: "Turn on Experimental Naext.one feature",
   }
 ];
 
@@ -66,14 +73,11 @@ async function openRandomNote() {
 }
 
 /**
- *dasdsadwevwe First test
- */
-/**
  * open random note in main area.
  * @param {*} pages 
  */
-async function openRandomNoteInMain(pages) {
-  if (pages && pages.length > 0) {
+async function openRandomNoteInMain(pages, naext) { /* this is to be rewritten */
+  if (pages && pages.length > 0 && !naext) {
     const index = Math.floor(Math.random() * pages.length);
     const page = pages[index];
     if (page && page.name) {
@@ -165,17 +169,17 @@ function main() {
   });
 
   logseq.App.registerUIItem("toolbar", {
-    key: "logseq-random-note-toolbar",
+    key: "logseq-naext-one-toolbar",
     template: `
-      <span class="logseq-random-note-toolbar">
+      <span class="logseq-naext-one-toolbar">
         <a title="I'm Feeling Lucky(r n)" class="button" data-on-click="handleRandomNote">
-          <i class="ti ti-windmill"></i>
+          <i class="ti ti-angle-double-right"></i>
         </a>
       </span>
     `,
   });
 
-  logseq.App.registerCommandPalette(
+/*   logseq.App.registerCommandPalette(
     {
       key: "logseq-random-note",
       label: "Random note => Let's go",
@@ -224,7 +228,7 @@ function main() {
     () => {
       logseq.updateSettings({ randomMode: "query" });
     }
-  );
+  ); */
 }
 
 logseq.ready(main).catch(console.error);
