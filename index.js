@@ -55,6 +55,7 @@ logseq.useSettingsSchema(settingsTemplate);
 
 async function openRandomNote() {
   const queryScript = getQueryScript();
+  const naextOne = logseq.settings.naextOne;
   let stepSize = parseInt(logseq.settings.randomStepSize || 1);
   try {
     let ret = await logseq.DB.datascriptQuery(queryScript);
@@ -69,7 +70,7 @@ async function openRandomNote() {
         pages[i] = await logseq.Editor.getPage(block.page.id);
       }
     }
-    openRandomNoteInMain(pages);
+    openRandomNoteInMain(pages, naextOne);
     if (stepSize > 1) {
       openRandomNoteInSidebar(pages, stepSize - 1);
     }
@@ -86,10 +87,25 @@ async function openRandomNote() {
  * open random note in main area.
  * @param {*} pages
  */
-async function openRandomNoteInMain(pages, naext) { /* this is to be rewritten */
+async function openRandomNoteInMain(pages, naext) { /* So essentially what I want is a function that returns all pages + a chance. No. I just want a skewed function */
   if (pages && pages.length > 0 && !naext) {
-    const index = Math.floor(Math.random() * pages.length);
+    const index = Math.floor(Math.random() * pages.length); /* this is where the uniform math happens */
     const page = pages[index];
+    if (page && page.name) {
+      logseq.App.pushState("page", { name: page.name });
+    } else if (page && page.page) {
+      const blockInfo = (await logseq.Editor.getBlock(page.id)) || {
+        uuid: "",
+      };
+      logseq.App.pushState("page", { name: blockInfo.uuid });
+    }
+  }
+  else if (pages && pages.length > 0 && naext) {
+  	console.log("Hello")
+    beta = sin(Math.floor(Math.random() * pages.length)*pi/2)^2
+    const index = (beta < 0.5) ? 2*beta : 2*(1-beta);
+    print(beta)
+    print(index)
     if (page && page.name) {
       logseq.App.pushState("page", { name: page.name });
     } else if (page && page.page) {
@@ -182,7 +198,7 @@ function main() {
     template: `
       <span class="logseq-naext-one-toolbar">
         <a title="I'm Feeling Lucky(r n)" class="button" data-on-click="handleRandomNote">
-          <i class="ti ti-angle-double-right"></i>
+          <i class="ti ti-windmill"></i>
         </a>
       </span>
     `,
