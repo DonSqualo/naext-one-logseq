@@ -40,7 +40,7 @@ const settingsTemplate = [
     title: "Random walk step size.",
     description: "Random walk step size. Use it with caution. One shows in main area, others show in the right sidebar.",
     enumChoices: ["1", "3", "5", "7", "10"],
-    enumPicker: 'radio' 
+    enumPicker: 'radio'
   }
 ];
 
@@ -52,6 +52,16 @@ async function openRandomNote() {
   try {
     let ret = await logseq.DB.datascriptQuery(queryScript);
     const pages = ret?.flat();
+    for (let i = 0; i < pages.length; i++) {
+      const block = pages[i];
+      if (
+        block.parent && block.page &&
+        block.parent?.id === block.page?.id &&
+        (await logseq.Editor.getPreviousSiblingBlock(block.uuid)) == null
+      ) {
+        pages[i] = await logseq.Editor.getPage(block.page.id);
+      }
+    }
     openRandomNoteInMain(pages);
     if (stepSize > 1) {
       openRandomNoteInSidebar(pages, stepSize - 1);
@@ -70,7 +80,7 @@ async function openRandomNote() {
  */
 /**
  * open random note in main area.
- * @param {*} pages 
+ * @param {*} pages
  */
 async function openRandomNoteInMain(pages) {
   if (pages && pages.length > 0) {
@@ -89,15 +99,14 @@ async function openRandomNoteInMain(pages) {
 
 /**
  * open random notes in right sidebar.
- * @param {*} pages 
- * @param {*} counts 
+ * @param {*} pages
+ * @param {*} counts
  */
 async function openRandomNoteInSidebar(pages, counts) {
   for(var i = 0; i < counts; i++) {
     const index = Math.floor(Math.random() * pages.length);
     const page = pages[index];
-    let uuid = page.uuid?.$uuid$ || ''
-    logseq.Editor.openInRightSidebar(uuid)
+    logseq.Editor.openInRightSidebar(page.uuid)
   }
 }
 
@@ -132,7 +141,7 @@ function getQueryScript() {
         `
       [:find (pull ?b [*])
         :where
-        [?b :block/refs ?bp] 
+        [?b :block/refs ?bp]
         [?bp :block/name ?name]
         [(contains? #{` +
         tags +
@@ -144,7 +153,7 @@ function getQueryScript() {
         `
         [:find (pull ?b [*])
           :where
-          [?b :block/refs ?bp] 
+          [?b :block/refs ?bp]
           [?bp :block/name ?name]
           [(contains? #{"card"} ?name)]]
         `
